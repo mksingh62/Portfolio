@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: portfolio
+    env: node
+    buildCommand: |
+      npm install
+      npm rebuild bcrypt --build-from-source
+    startCommand: node index.js
+    envVars:
+      - key: NODE_VERSION
+        value: 18.17.0 
