@@ -5,53 +5,28 @@ var mongoose = require("mongoose");
 const jwt = require('jsonwebtoken');
 const path = require("path");
 const cons = require('consolidate');
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcrypt')
 // const Register = require("./registers")
 // const Register = require("./registers/msg")
 // const Register2 = require("/registers/Regist")
 const { Register, Register2 , Register3 } = require('./registers');
 require('dotenv').config();
 
-// Environment variable configuration
-const isProduction = process.env.NODE_ENV === 'production';
-
-// Define environment variables with fallbacks for development
-const env = {
-    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-    SESSION_SECRET: process.env.SESSION_SECRET || 'dev-session-secret',
-    MONGODB_URI: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/registrationFrom',
-    JWT_SECRET: process.env.JWT_SECRET || 'dev-jwt-secret',
-    GMAIL_USER: process.env.GMAIL_USER,
-    GMAIL_PASS: process.env.GMAIL_PASS
-};
-
-// Check required variables in production
-if (isProduction) {
-    const missingVars = Object.entries(env)
-        .filter(([key, value]) => !value)
-        .map(([key]) => key);
-
-    if (missingVars.length > 0) {
-        console.error('Missing required environment variables in production:', missingVars);
-        console.error('Please set these variables in your Render dashboard:');
-        missingVars.forEach(varName => {
-            console.error(`- ${varName}`);
-        });
-        process.exit(1);
-    }
-}
-
-// Log environment status (safely)
-console.log('Environment:', process.env.NODE_ENV || 'development');
-console.log('MongoDB URI configured:', !!env.MONGODB_URI);
-console.log('Google OAuth configured:', !!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET));
-console.log('Email configured:', !!(env.GMAIL_USER && env.GMAIL_PASS));
-
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require('express-session');
-const nodemailer = require('nodemailer');
+
+
+
+// Initialize passport and session middleware
+
+// Start server
+
+
+
+
+const nodemailer= require('nodemailer');
+
 
 //create app
 var mail;
@@ -59,26 +34,19 @@ const app = express()
 
 const port = process.env.PORT || 3000;
 const staticpath = path.join(__dirname, "public/views");
-const JWT_SECRET = env.JWT_SECRET;
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3005';
+const JWT_SECRET = process.env.JWT_SECRET;
+const BASE_URL = process.env.NODE_ENV === 'production' 
+    ? 'https://myportfolio-s5g7.onrender.com'
+    : 'http://localhost:3005';
 app.use(bodyParse.json())
 app.use(express.static('public'))
 app.use(bodyParse.urlencoded({
     extended: true
 }))
 
+
 // conect database
-mongoose.connect(env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
-    console.log('Connected to MongoDB');
-}).catch(err => {
-    console.error('MongoDB connection error:', err);
-    if (isProduction) {
-        process.exit(1);
-    }
-});
+
 
 // view engine setup
 app.engine('html', cons.swig)
@@ -88,12 +56,22 @@ app.set('view engine', 'html');
 var db = mongoose.connection;
 
 // check connect
+
 db.on('error', () => console.log("error in connecting database"));
 db.once('open', () => console.log("Connected to Database"));
 
+
 app.get("/", (req, res) => {
+
+    // res.set({
+    //     "Allow-access-Allow-Origin": '*'
+    // })
+
+    // return res.redirect('index.html');
     res.render("index");
+
 })
+
 
 app.post("/login", async (req, res) => {
     try {
@@ -117,9 +95,14 @@ app.post("/login", async (req, res) => {
 
         }
 
+
+
+
+
     } catch (err) {
         res.status(400).send(err);
     }
+
 })
 
 app.post("/signup", async (req, res) => {
@@ -143,6 +126,7 @@ app.post("/signup", async (req, res) => {
     } catch (err) {
         res.status(400).send(err);
     }
+
 })
 
 app.get("/reset", (req, res) => {
@@ -155,10 +139,12 @@ app.post("/reset", async (req, res) => {
         console.log(mail);
         const usermail = await Register2.findOne({ email: email });
 
+
         if (email !== usermail.email) {
             res.send("user not register")
             return;
         }
+
 
         const secret = JWT_SECRET + usermail.password
         const payload = {
@@ -167,7 +153,7 @@ app.post("/reset", async (req, res) => {
         }
 
         const token = jwt.sign(payload, secret, { expiresIn: '15m' })
-        const link = `${BASE_URL}/reset-password/${usermail.id}/${token}`
+        const link = `http://localhost:3005/reset-password/${usermail.id}/${token}`
         const transporter = nodemailer.createTransport({
             service:'gmail',
             host: "smtp.gmail.com",
@@ -181,7 +167,7 @@ app.post("/reset", async (req, res) => {
           const mailOptions= {
             from: {
                 name:'Mohit',
-                address: process.env.GMAIL_USER
+                address: "mksinghmksinghmk@gmail.com"
             }, // sender address
             to: req.body.email, // list of receivers
             subject: "Reset Your Password", // Subject line
@@ -200,28 +186,37 @@ app.post("/reset", async (req, res) => {
         console.log(link)
         res.send("the reset link has been sent to your email")
 
+
+
+
+
+
     } catch (err) {
         res.status(400).send(err);
     }
-})
+
+});
+
 
 app.use(session({ 
-    secret: env.SESSION_SECRET,
-    resave: true, 
-    saveUninitialized: true 
+    secret: process.env.SESSION_SECRET || process.env.GOOGLE_CLIENT_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 
 // Passport configuration
-if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
-    passport.use(new GoogleStrategy({
-        clientID: env.GOOGLE_CLIENT_ID,
-        clientSecret: env.GOOGLE_CLIENT_SECRET,
-        callbackURL: isProduction 
-            ? 'https://myportfolio-s5g7.onrender.com/auth/google/callback'
-            : `http://localhost:${port}/auth/google/callback`
-    }, (accessToken, refreshToken, profile, done) => {
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: `${BASE_URL}/auth/google/callback`
+}, async (accessToken, refreshToken, profile, done) => {
+    try {
         const googleAuthData = new Register3({
             displayName: profile.displayName,
             googleId: profile.id,
@@ -229,13 +224,12 @@ if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
             photos: profile.photos[0].value
         });
         
-        googleAuthData.save()
-            .then(() => done(null, profile))
-            .catch(err => done(err));
-    }));
-} else {
-    console.warn('Google OAuth is not configured. Google login will not work.');
-}
+        await googleAuthData.save();
+        return done(null, profile);
+    } catch (err) {
+        return done(err);
+    }
+}));
 
 passport.serializeUser((user, done) => {
     done(null, user);
@@ -246,38 +240,47 @@ passport.deserializeUser((obj, done) => {
 });
 
 // Routes
+
+// app.get('/', (req, res) => {
+//     res.render("index");
+// });
+
+
 app.get('/auth/google',
     passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
 app.get('/auth/google/callback', 
-passport.authenticate('google', { 
-    successRedirect: process.env.NODE_ENV === 'production'
-        ? 'https://myportfolio-s5g7.onrender.com/'
-        : 'http://localhost:3005/',
-    failureRedirect: '/'
-}));
+    passport.authenticate('google', { 
+        successRedirect: `${BASE_URL}/`,
+        failureRedirect: '/'
+    })
+);
+
+
+
 
 app.get('/reset-password/:id/:token', async (req, res) => {
     
-    const usermail = await Register2.findOne({ email: mail });
-    console.log(usermail)
-    const { id, token } = req.params;
-    // res.send(req.params)
-    if (id !== usermail.id) {
-        res.send("invalid id...");
-        return;
+
+        const usermail = await Register2.findOne({ email: mail });
+        console.log(usermail)
+        const { id, token } = req.params;
+        // res.send(req.params)
+        if (id !== usermail.id) {
+            res.send("invalid id...");
+            return;
+        }
+
+        const secret = JWT_SECRET + usermail.password;
+    try {    
+        const payload = jwt.verify(token, secret);
+        res.render('reset-password', { email: usermail.email });
+
+    } catch (error) {
+        console.log(error.message);
+        res.send(error.message);
     }
-
-    const secret = JWT_SECRET + usermail.password;
-try {    
-    const payload = jwt.verify(token, secret);
-    res.render('reset-password', { email: usermail.email });
-
-} catch (error) {
-    console.log(error.message);
-    res.send(error.message);
-}
 });
                         
 app.post('/reset-password/:id/:token', async (req, res) => {
@@ -310,6 +313,7 @@ app.post('/reset-password/:id/:token', async (req, res) => {
 app.get('/message', async(req,res)=>{
     return res.redirect('login.html');
 })
+
 
 app.post('/message', async(req,res)=>{
     try {
