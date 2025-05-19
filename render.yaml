@@ -2,7 +2,7 @@ services:
   - type: web
     name: portfolio
     env: node
-    buildCommand: npm install --production && npm install bcrypt@5.0.1 --no-save
+    buildCommand: npm install --production
     startCommand: node index.js
     envVars:
       - key: NODE_VERSION
