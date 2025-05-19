@@ -201,7 +201,11 @@ app.post("/reset", async (req, res) => {
 });
 
 
-app.use(session({ secret: process.env.GOOGLE_CLIENT_SECRET, resave: true, saveUninitialized: true }));
+app.use(session({ 
+    secret: process.env.SESSION_SECRET || 'your-fallback-secret-key', 
+    resave: true, 
+    saveUninitialized: true 
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -209,7 +213,9 @@ app.use(passport.session());
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: `http://localhost:${port}/auth/google/callback`
+    callbackURL: process.env.NODE_ENV === 'production' 
+        ? 'https://myportfolio-s5g7.onrender.com/auth/google/callback'
+        : `http://localhost:${port}/auth/google/callback`
 }, (accessToken, refreshToken, profile, done) => {
     // This is where you would typically save user details to your database
     
@@ -247,13 +253,12 @@ app.get('/auth/google',
 );
 
 app.get('/auth/google/callback', 
-passport.authenticate('google', { successRedirect:"http://localhost:3005/",
-        failureRedirect: '/' })
-        // res.render("index")
-
-
-    
-);
+passport.authenticate('google', { 
+    successRedirect: process.env.NODE_ENV === 'production'
+        ? 'https://myportfolio-s5g7.onrender.com/'
+        : 'http://localhost:3005/',
+    failureRedirect: '/'
+}));
 
 
 
