@@ -35,6 +35,7 @@ const app = express()
 const port = process.env.PORT || 3000;
 const staticpath = path.join(__dirname, "public/views");
 const JWT_SECRET = process.env.JWT_SECRET;
+const BASE_URL = process.env.BASE_URL || 'http://localhost:3005';
 app.use(bodyParse.json())
 app.use(express.static('public'))
 app.use(bodyParse.urlencoded({
@@ -155,7 +156,7 @@ app.post("/reset", async (req, res) => {
         }
 
         const token = jwt.sign(payload, secret, { expiresIn: '15m' })
-        const link = `http://localhost:3005/reset-password/${usermail.id}/${token}`
+        const link = `${BASE_URL}/reset-password/${usermail.id}/${token}`
         const transporter = nodemailer.createTransport({
             service:'gmail',
             host: "smtp.gmail.com",
@@ -169,7 +170,7 @@ app.post("/reset", async (req, res) => {
           const mailOptions= {
             from: {
                 name:'Mohit',
-                address: "mksinghmksinghmk@gmail.com"
+                address: process.env.GMAIL_USER
             }, // sender address
             to: req.body.email, // list of receivers
             subject: "Reset Your Password", // Subject line
