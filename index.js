@@ -12,6 +12,28 @@ const bcrypt = require('bcryptjs')
 const { Register, Register2 , Register3 } = require('./registers');
 require('dotenv').config();
 
+// Add environment variable checks
+const requiredEnvVars = [
+    'GOOGLE_CLIENT_ID',
+    'GOOGLE_CLIENT_SECRET',
+    'SESSION_SECRET',
+    'MONGODB_URI',
+    'JWT_SECRET',
+    'GMAIL_USER',
+    'GMAIL_PASS'
+];
+
+const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
+if (missingEnvVars.length > 0) {
+    console.error('Missing required environment variables:', missingEnvVars);
+    process.exit(1);
+}
+
+// Log environment (but not sensitive values)
+console.log('Environment:', process.env.NODE_ENV);
+console.log('Google Client ID exists:', !!process.env.GOOGLE_CLIENT_ID);
+console.log('Google Client Secret exists:', !!process.env.GOOGLE_CLIENT_SECRET);
+
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require('express-session');
