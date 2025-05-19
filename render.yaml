@@ -4,8 +4,11 @@ services:
     env: node
     buildCommand: |
       npm install
+      npm install bcrypt@5.0.1
       npm rebuild bcrypt --build-from-source
     startCommand: node index.js
     envVars:
       - key: NODE_VERSION
-        value: 18.17.0 
+        value: 18.17.0
+      - key: NPM_CONFIG_PYTHON
+        value: /usr/bin/python3 
