@@ -3,10 +3,10 @@ services:
     name: portfolio
     env: node
     buildCommand: |
-      npm cache clean --force
-      rm -rf node_modules
       npm install
-    startCommand: node index.js
+      npm install bcryptjs
+    startCommand: |
+      node index.js
     envVars:
       - key: NODE_VERSION
         value: 18.17.0
