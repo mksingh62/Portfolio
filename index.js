@@ -16,8 +16,6 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require('express-session');
 
-
-
 // Initialize passport and session middleware
 
 // Start server
@@ -38,15 +36,36 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const BASE_URL = process.env.NODE_ENV === 'production' 
     ? 'https://myportfolio-s5g7.onrender.com'
     : 'http://localhost:3005';
+
+// Middleware setup
 app.use(bodyParse.json())
 app.use(express.static('public'))
 app.use(bodyParse.urlencoded({
     extended: true
 }))
 
+// Session configuration
+app.use(session({ 
+    secret: process.env.SESSION_SECRET || process.env.GOOGLE_CLIENT_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
+}));
 
-// conect database
+// Passport initialization
+app.use(passport.initialize());
+app.use(passport.session());
 
+// Database connection
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => console.log("✅ Connected to MongoDB"))
+.catch((err) => console.error("❌ MongoDB connection error:", err));
 
 // view engine setup
 app.engine('html', cons.swig)
@@ -75,59 +94,125 @@ app.get("/", (req, res) => {
 
 app.post("/login", async (req, res) => {
     try {
-        const email = req.body.email;
-        const password = req.body.password;
+        console.log('Login request body:', req.body); // Debug log
+        const { email, password } = req.body;
 
-        const usermail = await Register2.findOne({ email: email });
-        // const userData = await Register2.findById({ _id:req.body.id})
-        // console.log(userData);
-        // res.sendStatus(usermail.password)
-        console.log(usermail.id);
-
-        if (usermail.password == password) {
-            
-            res.render("index")
-
-        }
-        else {
-
-            res.send("password is wrong")
-
+        if (!email || !password) {
+            console.log('Missing email or password in request'); // Debug log
+            return res.status(400).json({ error: "Email and password are required" });
         }
 
+        // Find user by email
+        const user = await Register2.findOne({ email: email });
+        console.log('Database query result:', user ? 'User found' : 'User not found'); // Debug log
+        
+        if (!user) {
+            console.log('User not found:', email); // Debug log
+            return res.status(400).json({ error: "Email not registered. Please sign up first." });
+        }
 
+        // Compare password
+        const isMatch = await bcrypt.compare(password, user.password);
+        console.log('Password match result:', isMatch ? 'Password matches' : 'Password does not match'); // Debug log
+        
+        if (!isMatch) {
+            console.log('Invalid password for user:', email); // Debug log
+            return res.status(400).json({ error: "Invalid password" });
+        }
 
+        console.log('Login successful for:', email); // Debug log
 
-
+        // Create session
+        req.session.user = {
+            id: user._id,
+            email: user.email
+        };
+        
+        // Save session before redirect
+        req.session.save((err) => {
+            if (err) {
+                console.error('Session save error:', err);
+                return res.status(500).json({ error: "Server error" });
+            }
+            res.json({ 
+                success: true, 
+                user: {
+                    email: user.email
+                }
+            });
+        });
     } catch (err) {
-        res.status(400).send(err);
+        console.error("Login error:", err);
+        res.status(500).json({ error: "Server error" });
     }
-
-})
+});
 
 app.post("/signup", async (req, res) => {
     try {
-        console.log(req.body.password)
-        console.log(req.body.email)
+        console.log('Received signup request body:', req.body); // Debug log
+        
+        const { email, password, confirmPassword } = req.body;
+
+        // Validate input
+        if (!email || !password || !confirmPassword) {
+            console.log('Missing fields:', { email, password, confirmPassword }); // Debug log
+            return res.status(400).json({ error: "All fields are required" });
+        }
+
+        // Check if passwords match
+        if (password !== confirmPassword) {
+            return res.status(400).json({ error: "Passwords do not match" });
+        }
+
+        // Check if user already exists
+        const existingUser = await Register2.findOne({ email });
+        console.log('Existing user check result:', existingUser ? 'User exists' : 'No existing user'); // Debug log
+        
+        if (existingUser) {
+            console.log('Email already registered:', email); // Debug log
+            return res.status(400).json({ error: "This email is already registered. Please login instead." });
+        }
+
+        // Hash password
         const salt = await bcrypt.genSalt(10);
-        const hsahedPassword = await bcrypt.hash(req.body.password,salt);
-        console.log(hsahedPassword);
-        registerEmployee = new Register2({
-            email: req.body.email,
-            password: hsahedPassword,
-            confirmPassword: hsahedPassword
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Create new user
+        const newUser = new Register2({
+            email,
+            password: hashedPassword,
+            confirmPassword: hashedPassword // Store hashed password in confirmPassword field too
         });
-        // res.send(registerEmployee);
-        const registered = await registerEmployee.save();
-        res.render("index")
 
-        // res.status(201).send(registerEmployee);
+        // Save user
+        await newUser.save();
+        console.log('User saved successfully:', newUser.email); // Debug log
 
+        // Create session
+        req.session.user = {
+            id: newUser._id,
+            email: newUser.email
+        };
+
+        // Save session before redirect
+        req.session.save((err) => {
+            if (err) {
+                console.error('Session save error:', err);
+                return res.status(500).json({ error: "Server error" });
+            }
+            console.log('Session saved successfully'); // Debug log
+            res.json({ 
+                success: true, 
+                user: {
+                    email: newUser.email
+                }
+            });
+        });
     } catch (err) {
-        res.status(400).send(err);
+        console.error("Signup error:", err);
+        res.status(500).json({ error: "Server error" });
     }
-
-})
+});
 
 app.get("/reset", (req, res) => {
     return res.redirect('login.html');
@@ -197,18 +282,6 @@ app.post("/reset", async (req, res) => {
 
 });
 
-
-app.use(session({ 
-    secret: process.env.SESSION_SECRET || process.env.GOOGLE_CLIENT_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
-    }
-}));
-app.use(passport.initialize());
-app.use(passport.session());
 
 // Passport configuration
 passport.use(new GoogleStrategy({
@@ -334,6 +407,57 @@ app.post('/message', async(req,res)=>{
         res.status(400).send(err);
     }
 })
+
+// Authentication middleware
+const isAuthenticated = (req, res, next) => {
+    if (req.session.user) {
+        return next();
+    }
+    res.redirect('/login');
+};
+
+// Logout route
+app.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error destroying session:', err);
+            return res.status(500).json({ error: "Error during logout" });
+        }
+        res.json({ success: true });
+    });
+});
+
+// Keep the GET route for backward compatibility
+app.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error destroying session:', err);
+            return res.redirect('/');
+        }
+        res.redirect('/');
+    });
+});
+
+// Protected route example
+app.get('/profile', isAuthenticated, (req, res) => {
+    res.render('profile', { user: req.session.user });
+});
+
+// Check authentication status
+app.get('/check-auth', (req, res) => {
+    if (req.session.user) {
+        res.json({
+            authenticated: true,
+            user: {
+                email: req.session.user.email
+            }
+        });
+    } else {
+        res.json({
+            authenticated: false
+        });
+    }
+});
 
 app.listen(port, () => {
     console.log(`server is running at port no ${port}`);
