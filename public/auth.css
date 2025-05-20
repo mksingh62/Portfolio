@@ -1,0 +1,291 @@
+/* Auth Forms Container */
+.container.forms {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Form Styles */
+.form {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    width: 400px;
+    position: relative;
+    transform: translateY(-20px);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.form.active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Close Button */
+.cancel {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.cancel:hover {
+    color: #ff3333;
+}
+
+/* Form Header */
+.form-content header {
+    font-size: 28px;
+    font-weight: 600;
+    color: #232836;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Input Fields */
+.field {
+    position: relative;
+    height: 50px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.field input {
+    height: 100%;
+    width: 100%;
+    padding: 0 15px;
+    border: 1px solid #CACACA;
+    border-radius: 6px;
+    outline: none;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.field input:focus {
+    border-color: #333;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.field .eye-icon {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #8b8b8b;
+    cursor: pointer;
+    padding: 5px;
+}
+
+/* Form Links */
+.form-link {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.form-link a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.form-link a:hover {
+    color: #000;
+}
+
+/* Button Styles */
+.button-field {
+    margin-top: 30px;
+}
+
+.button-field button {
+    width: 100%;
+    height: 50px;
+    background: #333;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.button-field button:hover {
+    background: #000;
+}
+
+/* Divider Line */
+.line {
+    position: relative;
+    height: 1px;
+    width: 100%;
+    margin: 30px 0;
+    background-color: #d4d4d4;
+}
+
+.line::before {
+    content: 'Or';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    color: #232836;
+    padding: 0 15px;
+}
+
+/* Social Login Options */
+.media-options {
+    margin-bottom: 15px;
+}
+
+.media-options a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #232836;
+    background: #f5f5f5;
+    transition: background 0.3s ease;
+}
+
+.media-options a:hover {
+    background: #e8e8e8;
+}
+
+.media-options .facebook-icon {
+    color: #1877f2;
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.media-options .google-img {
+    height: 20px;
+    margin-right: 10px;
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.form {
+    animation: slideIn 0.3s ease forwards;
+}
+
+.container.forms {
+    animation: fadeIn 0.3s ease forwards;
+}
+
+/* Profile Styles */
+.profile-dropdown {
+    position: relative;
+}
+
+.profile-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-btn i {
+    font-size: 24px;
+    color: #333;
+}
+
+.profile-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    min-width: 200px;
+    display: none;
+    z-index: 1000;
+}
+
+.profile-menu.active {
+    display: block;
+}
+
+.profile-info {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+}
+
+.profile-info span {
+    color: #333;
+    font-size: 14px;
+    word-break: break-all;
+}
+
+.profile-actions {
+    padding: 5px 0;
+}
+
+.profile-actions a {
+    color: #ff3333;
+    text-decoration: none;
+    font-size: 14px;
+    display: block;
+    padding: 5px 0;
+    transition: color 0.3s ease;
+}
+
+.profile-actions a:hover {
+    color: #cc0000;
+}
+
+/* Update login button styles */
+.btn-login {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.btn-login:hover {
+    background: #000;
+} 
