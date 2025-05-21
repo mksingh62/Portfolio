@@ -35,13 +35,16 @@ section{
     padding: 0 80px;
     margin: auto;
 }
-.about, .services, .skills, .teams, .contact, footer{
+.about, .services, .skills, .teams, .contact, footer, .projects, .education{ /* Added projects and education */
     font-family: 'Poppins', sans-serif;
 }
 .about .about-content,
 .services .serv-content,
 .skills .skills-content,
-.contact .contact-content{
+.contact .contact-content,
+.projects .projects-content, /* Added projects content */
+.education .education-content /* Added education content */
+{
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -258,19 +261,86 @@ section .title::after{
 }
 
 /* services section styling */
-.services, .teams{
+.services, .teams { /* Removed projects and education */
     color:#fff;
     background: #111;
 }
 .services .title::before,
-.teams .title::before{
+.teams .title::before,
+.projects .title::before, /* Added projects */
+.education .title::before /* Added education */
+{
     background: #fff;
 }
-.services .title::after,
-.teams .title::after{
+.services .title::after{
     background: #111;
     content: "what i provide";
 }
+
+/* projects section styling */
+.projects, .education { /* Added styles for projects and education sections */
+    color: #333; /* Dark text color for light background */
+    background: #f8f8f8; /* Light grey background */
+}
+
+.projects .title::after {
+    content: "my work"; /* Or "projects" */
+}
+
+.projects .projects-content .project-card{
+    width: calc(50% - 20px); /* Adjust as needed for layout */
+    background: #fff; /* Changed to white background */
+    text-align: left;
+    border-radius: 6px;
+    padding: 20px 25px; /* Adjust padding */
+    margin-bottom: 20px; /* Space between project cards */
+    transition: all 0.3s ease;
+    cursor: pointer; /* Optional: if cards are clickable */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added subtle shadow */
+}
+
+.projects .projects-content .project-card:hover{
+    background: crimson; /* Keep crimson highlight on hover */
+    color: #fff;
+}
+
+.projects .projects-content .project-card .box{
+    display: flex;
+    flex-direction: column;
+    /* Removed align-items: center; justify-content: center; for left alignment */
+}
+
+.projects .projects-content .project-card .text{
+    font-size: 22px; /* Adjust font size */
+    font-weight: 500;
+    margin: 0 0 10px 0; /* Adjust margin */
+    color: crimson; /* Keep crimson highlight for titles */
+}
+
+.projects .projects-content .project-card:hover .text{
+     color: #fff; /* Change title color on hover */
+}
+
+
+.projects .projects-content .project-card p{
+    font-size: 16px; /* Adjust font size */
+    margin-bottom: 5px; /* Space between paragraphs */
+    color: #333; /* Dark text color for readability on light background */
+}
+
+.projects .projects-content .project-card:hover p{
+     color: #fff; /* Change text color on hover */
+}
+
+.projects .projects-content .project-card p strong{
+    color: #333; /* Dark color for strong text on light background */
+}
+
+.projects .projects-content .project-card:hover p strong{
+     color: #fff; /* Keep strong text color on hover */
+}
+
+
 .services .serv-content .card{
     width: calc(33% - 20px);
     background: #222;
@@ -319,22 +389,49 @@ section .title::after{
 .skills .skills-content .left p{
     text-align: justify;
 }
-.skills .skills-content .left a{
-    display: inline-block;
-    background: crimson;
-    color: #fff;
+
+/* Added styling for skill categories and list */
+.skills .skills-content .left .skill-categories {
+    margin-top: 15px;
+}
+
+.skills .skills-content .left .skill-category {
+    margin-bottom: 20px;
+}
+
+.skills .skills-content .left .skill-category h3 {
     font-size: 18px;
-    font-weight: 500;
-    padding: 8px 16px;
-    margin-top: 20px;
-    border-radius: 6px;
-    border: 2px solid crimson;
-    transition: all 0.3s ease;
+    margin-bottom: 8px;
+    color: crimson; /* Example styling */
 }
-.skills .skills-content .left a:hover{
-    color: crimson;
-    background: none;
+
+.skills .skills-content .left .skill-category ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
+
+.skills .skills-content .left .skill-category ul li {
+    font-size: 16px; /* Adjusted font size */
+    margin-bottom: 5px;
+    padding-left: 10px; /* Example indentation */
+    position: relative;
+}
+
+.skills .skills-content .left .skill-category ul li::before {
+    /* Removed content and associated styling that caused "/2022" text */
+    /*
+    content: "\\2022"; 
+    color: crimson; 
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+    */
+}
+/* End of added styling */
+
+
 .skills .skills-content .right .bars{
     margin-bottom: 15px;
 }
@@ -346,22 +443,27 @@ section .title::after{
 }
 .skills .skills-content .right span{
     font-weight: 500;
-    font-size: 18px;
+    font-size: 18px; /* Kept original font size for the number */
 }
+
+/* Corrected styles for skill bar lines and fill */
 .skills .skills-content .right .line{
-    height: 5px;
-    width: 100%;
+    height: 3px; /* Reduced height as requested */
+    width: 100%; /* Grey bar is full width */
     background: lightgrey;
-    position: relative;
+    position: relative; /* Important: Needed for absolute positioning of ::before */
 }
 .skills .skills-content .right .line::before{
-    content: "";
-    position: absolute;
-    height: 100%;
-    left: 0;
-    top: 0;
-    background: crimson;
+    content: ""; /* No text content in the bar itself */
+    position: absolute; /* Position relative to the parent .line */
+    height: 100%; /* Match the height of the grey line */
+    left: 0; /* Start from the left edge */
+    top: 0; /* Align to the top edge */
+    background: crimson; /* The red color */
+    /* The width of this ::before is set by individual skill classes below */
 }
+
+/* Set the width for each skill's red bar using the ::before pseudo-element */
 .skills-content .right .html::before{
     width: 90%;
 }
@@ -375,8 +477,35 @@ section .title::after{
     width: 50%;
 }
 .skills-content .right .mysql::before{
-    width: 70%;
+    width: 70%; /* Corrected percentage */
 }
+
+/* Added styles for new skill bars based on resume - setting width on ::before */
+.skills-content .right .python::before{
+    width: 85%; /* Matches HTML placeholder */
+}
+.skills-content .right .reactjs::before{
+    width: 75%; /* Matches HTML placeholder */
+}
+.skills-content .right .expressnode::before{
+    width: 70%; /* Matches HTML placeholder */
+}
+.skills-content .right .git::before{
+    width: 90%; /* Matches HTML placeholder */
+}
+/* End of added skill bar styles */
+
+/* Ensure width is NOT set on the .line elements with skill classes */
+.skills-content .right .html::before{ width: 90%; }
+.skills-content .right .css::before{ width: 60%; }
+.skills-content .right .js::before{ width: 80%; }
+.skills-content .right .php::before{ width: 50%; }
+.skills-content .right .mysql::before{ width: 70%; }
+/* And for the skills I added */
+.skills-content .right .python::before{ width: 85%; }
+.skills-content .right .reactjs::before{ width: 75%; }
+.skills-content .right .expressnode::before{ width: 70%; }
+.skills-content .right .git::before{ width: 90%; }
 
 /* teams section styling */
 .teams .title::after{
@@ -443,6 +572,50 @@ section .title::after{
 .owl-dot:hover{
     background: crimson!important;
 }
+
+/* education section styling */
+.education .title::after {
+    content: "my background"; /* Or "education" */
+}
+
+.education .education-content .education-item {
+    width: calc(50% - 20px); /* Adjust as needed for layout */
+    background: #fff; /* Changed to white background */
+    text-align: left;
+    border-radius: 6px;
+    padding: 20px 25px; /* Adjust padding */
+    margin-bottom: 20px; /* Space between education items */
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added subtle shadow */
+}
+
+.education .education-content .education-item:hover{
+     background: crimson; /* Keep crimson highlight on hover */
+     color: #fff;
+}
+
+.education .education-content .education-item .text {
+    font-size: 22px; /* Adjust font size */
+    font-weight: 500;
+    margin: 0 0 10px 0; /* Adjust margin */
+    color: crimson; /* Keep crimson highlight for titles */
+}
+
+.education .education-content .education-item:hover .text{
+     color: #fff; /* Change title color on hover */
+}
+
+
+.education .education-content .education-item p {
+    font-size: 16px; /* Adjust font size */
+    margin-bottom: 5px; /* Space between paragraphs */
+    color: #333; /* Dark text color for readability on light background */
+}
+
+.education .education-content .education-item:hover p {
+     color: #fff; /* Change text color on hover */
+}
+
 
 /* contact section styling */
 .contact .title::after{
@@ -567,6 +740,11 @@ footer span a:hover{
     .max-width{
         padding: 0 50px;
     }
+    .projects .projects-content .project-card, /* Added projects */
+    .education .education-content .education-item /* Added education */
+    {
+        width: calc(50% - 10px); /* Two cards per row */
+    }
 }
 @media (max-width: 947px){
     .menu-btn{
@@ -649,6 +827,11 @@ footer span a:hover{
     .services .serv-content .card{
         width: 100%;
     }
+    .projects .projects-content .project-card, /* Added projects */
+    .education .education-content .education-item /* Added education */
+    {
+        width: 100%; /* Stack cards on smaller screens */
+    }
 }
 
 @media (max-width: 500px) {
@@ -686,25 +869,14 @@ footer span a:hover{
     color: white;
 }
 .linkdin .row a i{
-    
+
     font-size: 50px;
 }
 
 
-
-
-
-
-
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
+/* Styles for the login/signup forms */
 .container{
     position: fixed;
     top: 0;
@@ -720,7 +892,7 @@ footer span a:hover{
     z-index: -1;
     opacity: 0;
     transition: 1s;
-   
+
 }
 .showcontainer{
     opacity: 1;
@@ -739,7 +911,7 @@ footer span a:hover{
     border: solid 2px black;
     opacity: 0;
     transition: 2s;
-    
+
 }
 
 .showform{
@@ -906,7 +1078,7 @@ a.google span{
     .form{
         padding: 20px 10px;
     }
-    
+
 }
 
 /* .container {
@@ -975,5 +1147,5 @@ button {
     height: 100px;
     background-color: aqua;
     display: none;
-    
+
 } */
