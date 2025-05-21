@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mohit's Portfolio</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="public/views/style.css">
     <link rel="stylesheet" href="auth.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -40,7 +41,7 @@
                 <li><a href="#contact" class="menu-btn">Contact</a></li>
                 <li><a href="#linkdin" class="menu-btn">Linkdin</a></li>
                 <li id="loginButtonContainer">
-                    <button class="btn-login" onclick="showmodel()" onsuccess="onSignIn">Login</button>
+                    <button class="btn-logi" onclick="showmodel()" onsuccess="onSignIn">Login</button>
                 </li>
                 <li id="profileContainer" style="display: none;">
                     <div class="profile-dropdown">
@@ -410,18 +411,18 @@
         </div>
     </section>
 
-
+<!-- 
     <section class="linkdin" id="linkdin">
         <div class="max-width">
             <div class="row">
-                <a href="https://www.linkedin.com/in/mohit-kumar-singh-4b9415288/"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
                 <div class="info">
-                    <div class="head"><a href="https://www.linkedin.com/in/mohit-kumar-singh-4b9415288/" style="color: white;">Linkdin</a></div>
+                    <div class="head"><a href="#" style="color: white;">Linkdin</a></div>
                     <div class="sub-title">My Linkdin Profile Page</div>
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
 
 
@@ -539,7 +540,42 @@
     </section>
     <!-- footer section start -->
     <footer>
-        <span>Created By <a href="https://github.com/mksingh62" target="_blank">Mohit</a> | <span class="far fa-copyright"></span>2025 All rights reserved.</span>
+        <div class="footer-content">
+            <div class="footer-row">
+                <!-- Quick Links Section -->
+                <div class="footer-section quick-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#projects">Projects</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Connect Section -->
+                <div class="footer-section connect">
+                    <h3>Connect With Me</h3>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/mohit-kumar-singh-4b9415288/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://github.com/mksingh62" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="mailto:mohit57421@gmail.com"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+
+                <!-- Contact Info Section -->
+                <div class="footer-section contact-info">
+                    <h3>Contact Info</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Raipur, Chhattisgarh</p>
+                    <p><i class="fas fa-phone"></i> +917745959020</p>
+                    <p><i class="fas fa-envelope"></i> mohit57421@gmail.com</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Created By <a href="https://github.com/mksingh62" target="_blank">Mohit Kumar Singh</a> | <span class="far fa-copyright"></span> 2024 All rights reserved.</p>
+        </div>
     </footer>
 
     <script src="script.js"></script>
