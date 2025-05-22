@@ -443,69 +443,62 @@ section .title::after{
 }
 .skills .skills-content .right span{
     font-weight: 500;
-    font-size: 18px; /* Kept original font size for the number */
+    font-size: 18px;
 }
 
-/* Corrected styles for skill bar lines and fill */
+/* Base style for skill bars */
 .skills .skills-content .right .line{
-    height: 3px; /* Reduced height as requested */
-    width: 100%; /* Grey bar is full width */
+    height: 3px;
+    width: 100%;
     background: lightgrey;
-    position: relative; /* Important: Needed for absolute positioning of ::before */
+    position: relative;
+    border-radius: 3px;
+    overflow: hidden;
 }
+
+/* Progress bar style */
 .skills .skills-content .right .line::before{
-    content: ""; /* No text content in the bar itself */
-    position: absolute; /* Position relative to the parent .line */
-    height: 100%; /* Match the height of the grey line */
-    left: 0; /* Start from the left edge */
-    top: 0; /* Align to the top edge */
-    background: crimson; /* The red color */
-    /* The width of this ::before is set by individual skill classes below */
+    content: "";
+    position: absolute;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: crimson;
+    border-radius: 3px;
+    transition: width 0.3s ease;
 }
 
-/* Set the width for each skill's red bar using the ::before pseudo-element */
-.skills-content .right .html::before{
-    width: 90%;
-}
-.skills-content .right .css::before{
-    width: 60%;
-}
-.skills-content .right .js::before{
-    width: 80%;
-}
-.skills-content .right .php::before{
-    width: 50%;
-}
-.skills-content .right .mysql::before{
-    width: 70%; /* Corrected percentage */
-}
-
-/* Added styles for new skill bars based on resume - setting width on ::before */
-.skills-content .right .python::before{
-    width: 85%; /* Matches HTML placeholder */
-}
-.skills-content .right .reactjs::before{
-    width: 75%; /* Matches HTML placeholder */
-}
-.skills-content .right .expressnode::before{
-    width: 70%; /* Matches HTML placeholder */
-}
-.skills-content .right .git::before{
-    width: 90%; /* Matches HTML placeholder */
-}
-/* End of added skill bar styles */
-
-/* Ensure width is NOT set on the .line elements with skill classes */
+/* Individual skill percentages */
 .skills-content .right .html::before{ width: 90%; }
 .skills-content .right .css::before{ width: 60%; }
 .skills-content .right .js::before{ width: 80%; }
 .skills-content .right .php::before{ width: 50%; }
-.skills-content .right .mysql::before{ width: 70%; }
-/* And for the skills I added */
+.skills-content .right .mysql::before{ width: 50%; }
 .skills-content .right .python::before{ width: 85%; }
 .skills-content .right .reactjs::before{ width: 75%; }
 .skills-content .right .expressnode::before{ width: 70%; }
 .skills-content .right .git::before{ width: 90%; }
+
+/* Add animation for skill bars */
+@keyframes skillProgress {
+    from { width: 0; }
+    to { width: var(--skill-width); }
+}
+
+.skills .skills-content .right .line::before {
+    animation: skillProgress 1s ease-in-out forwards;
+}
+
+/* Set custom properties for each skill */
+.skills-content .right .html::before { --skill-width: 90%; }
+.skills-content .right .css::before { --skill-width: 60%; }
+.skills-content .right .js::before { --skill-width: 80%; }
+.skills-content .right .php::before { --skill-width: 50%; }
+.skills-content .right .mysql::before { --skill-width: 50%; }
+.skills-content .right .python::before { --skill-width: 85%; }
+.skills-content .right .reactjs::before { --skill-width: 75%; }
+.skills-content .right .expressnode::before { --skill-width: 70%; }
+.skills-content .right .git::before { --skill-width: 90%; }
 
 /* teams section styling */
 .teams .title::after{
@@ -727,19 +720,19 @@ footer {
 }
 
 .footer-row {
-    display: flex; /* Make this a flex container */
-    flex-direction: row; /* Arrange items horizontally */
-    justify-content: space-between; /* Distribute space between items */
-    align-items: flex-start; /* Align items to the top */
-    width: 100%; /* Take full width of the parent */
-    gap: 30px; /* Add space between flex items */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    gap: 30px;
 }
 
 .footer-section {
-    flex: 1; /* Allow sections to grow and shrink equally */
+    flex: 1;
     padding: 0 10px;
     box-sizing: border-box;
-    min-width: 0; /* Prevent content from overflowing */
+    min-width: 0;
 }
 
 /* Quick Links Section */
@@ -876,6 +869,81 @@ footer {
 .footer-bottom a:hover {
     text-decoration: underline;
 }
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+    .footer-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+    }
+    
+    .footer-section {
+        width: 100%;
+        text-align: center !important;
+        padding: 0 20px;
+    }
+
+    .footer-section h3::after {
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        right: auto !important;
+    }
+
+    .footer-section.contact-info p {
+        justify-content: center !important;
+        margin-bottom: 20px;
+    }
+
+    .social-links {
+        margin: 20px 0;
+        justify-content: center !important;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .social-links a {
+        margin: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-section {
+        padding: 0 15px;
+    }
+
+    .footer-section h3 {
+        font-size: 1.1rem;
+        margin-bottom: 25px;
+    }
+
+    .footer-section ul li a,
+    .footer-section p {
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    .social-links {
+        gap: 10px;
+    }
+
+    .social-links a {
+        width: 35px;
+        height: 35px;
+        font-size: 1.2rem;
+    }
+
+    .footer-bottom {
+        padding: 15px 0;
+        margin-top: 30px;
+    }
+
+    .footer-bottom p {
+        font-size: 0.85rem;
+        padding: 0 15px;
+    }
+}
+
 /* responsive media query start */
 @media (max-width: 1104px) {
     .about .about-content .left img{
