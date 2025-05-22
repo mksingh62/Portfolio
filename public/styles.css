@@ -980,6 +980,7 @@ footer {
         text-align: center;
         padding-top: 80px;
         transition: all 0.3s ease;
+        overflow-y: auto;
     }
     .navbar .menu.active{
         left: 0;
