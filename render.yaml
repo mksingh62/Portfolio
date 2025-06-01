@@ -5,7 +5,7 @@ services:
     buildCommand: |
       npm install
       npm install bcryptjs
-      pip install torch numpy nltk && python nltk_setup.py
+      pip install torch numpy nltk && python setup.py
     startCommand: node index.js
     envVars:
       - key: NODE_ENV
