@@ -3,7 +3,6 @@ import json
 import torch
 import numpy as np
 import sys
-import nltk
 from model import NeuralNet
 from nltk_utils import bag_of_words, tokenize
 import torch.nn as nn
