@@ -3,9 +3,16 @@ import json
 import torch
 import numpy as np
 import sys
+import nltk
 from model import NeuralNet
 from nltk_utils import bag_of_words, tokenize
 import torch.nn as nn
+
+# Download required NLTK data
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt')
 
 def get_response(sentence):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
