@@ -14,7 +14,7 @@ def get_response(sentence):
         intents = json.load(json_data)
 
     FILE = "portfolio.pth"
-    data = torch.load(FILE)
+    data = torch.load(FILE, map_location=torch.device('cpu'))
 
     input_size = data["input_size"]
     hidden_size = data["hidden_size"]
