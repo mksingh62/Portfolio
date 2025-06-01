@@ -3,22 +3,25 @@ import json
 import torch
 import numpy as np
 import sys
-import os
 import nltk
+import os
 from model import NeuralNet
 from nltk_utils import bag_of_words, tokenize
+import torch.nn as nn
 
-# Setup custom nltk_data directory for Render (same as nltk_utils.py)
+# --- NLTK data setup and download ---
+
 nltk_data_dir = os.path.join(os.getcwd(), "nltk_data")
 os.makedirs(nltk_data_dir, exist_ok=True)
 nltk.data.path.append(nltk_data_dir)
 
-# Download 'punkt' tokenizer if missing
-try:
-    nltk.data.find('tokenizers/punkt')
-except LookupError:
-    nltk.download('punkt', download_dir=nltk_data_dir)
+for resource in ['punkt', 'punkt_tab']:
+    try:
+        nltk.data.find(f'tokenizers/{resource}')
+    except LookupError:
+        nltk.download(resource, download_dir=nltk_data_dir)
 
+# --- Rest of your chat.py code ---
 
 def get_response(sentence):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -62,10 +65,8 @@ def get_response(sentence):
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        # If message is provided as command line argument
         message = sys.argv[1]
     else:
-        # Read message from stdin
         message = sys.stdin.readline().strip()
     
     response = get_response(message)
