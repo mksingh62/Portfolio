@@ -587,6 +587,220 @@
     <script src="script.js"></script>
     <script src="mk.js"></script>
     <script src="auth.js"></script>
+
+    <!-- Chatbot Section -->
+    <div class="chat-icon" onclick="toggleChat()">
+        <i class="fas fa-comments"></i>
+    </div>
+
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header">
+            <h3>Chat with me</h3>
+            <button class="close-chat" onclick="toggleChat()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">
+                Hello! How can I help you today?
+            </div>
+        </div>
+        <form class="chat-form" id="chatForm" onsubmit="sendMessage(event)">
+            <input type="text" id="messageInput" placeholder="Type your message..." required>
+            <button type="submit">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
+
+    <style>
+        .chat-icon {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #c1121f;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .chat-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-icon i {
+            color: white;
+            font-size: 24px;
+        }
+
+        .chat-container {
+            position: fixed;
+            left: -400px;
+            bottom: 20px;
+            width: 350px;
+            height: 500px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            z-index: 999;
+            transition: left 0.3s ease;
+        }
+
+        .chat-container.active {
+            left: 20px;
+        }
+
+        .chat-header {
+            padding: 15px;
+            background-color: #c1121f;
+            color: white;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .close-chat {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        .message.bot {
+            background-color: #f0f0f0;
+            margin-right: auto;
+        }
+
+        .message.user {
+            background-color: #c1121f;
+            color: white;
+            margin-left: auto;
+        }
+
+        .chat-form {
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .chat-form input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .chat-form button {
+            background-color: #c1121f;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-form button:hover {
+            background-color: #a00f1a;
+        }
+    </style>
+
+    <script>
+        function toggleChat() {
+            const chatContainer = document.getElementById('chatContainer');
+            chatContainer.classList.toggle('active');
+        }
+
+        async function sendMessage(event) {
+            event.preventDefault();
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                const chatMessages = document.getElementById('chatMessages');
+                
+                // Add user message
+                const userMessage = document.createElement('div');
+                userMessage.className = 'message user';
+                userMessage.textContent = message;
+                chatMessages.appendChild(userMessage);
+                
+                // Clear input
+                input.value = '';
+                
+                try {
+                    // Show loading state
+                    const loadingMessage = document.createElement('div');
+                    loadingMessage.className = 'message bot';
+                    loadingMessage.textContent = '...';
+                    chatMessages.appendChild(loadingMessage);
+                    
+                    // Send message to backend
+                    const response = await fetch('/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message }),
+                    });
+                    
+                    const data = await response.json();
+                    
+                    // Remove loading message
+                    chatMessages.removeChild(loadingMessage);
+                    
+                    // Add bot response
+                    const botMessage = document.createElement('div');
+                    botMessage.className = 'message bot';
+                    botMessage.textContent = data.response;
+                    chatMessages.appendChild(botMessage);
+                } catch (error) {
+                    console.error('Error:', error);
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'message bot';
+                    errorMessage.textContent = "Sorry, I'm having trouble connecting. Please try again later.";
+                    chatMessages.appendChild(errorMessage);
+                }
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+    </script>
 </body>
 
 </html>
