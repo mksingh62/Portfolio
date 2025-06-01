@@ -15,6 +15,7 @@ require('dotenv').config();
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require('express-session');
+const { spawn } = require('child_process');
 
 // Initialize passport and session middleware
 
@@ -456,6 +457,48 @@ app.get('/check-auth', (req, res) => {
         res.json({
             authenticated: false
         });
+    }
+});
+
+app.post("/chat", async (req, res) => {
+    try {
+        const { message } = req.body;
+        
+        // Create a Python process
+        const pythonProcess = spawn('python', ['chat.py']);
+        
+        let response = '';
+        
+        // Send message to Python process
+        pythonProcess.stdin.write(message + '\n');
+        pythonProcess.stdin.end();
+        
+        // Handle Python process output
+        pythonProcess.stdout.on('data', (data) => {
+            response += data.toString();
+        });
+        
+        // Handle Python process errors
+        pythonProcess.stderr.on('data', (data) => {
+            console.error(`Python Error: ${data}`);
+        });
+        
+        // Handle Python process completion
+        pythonProcess.on('close', (code) => {
+            if (code !== 0) {
+                return res.status(500).json({ error: "Chatbot error occurred" });
+            }
+            // Extract bot response from the output
+            const botResponse = response.split('\n').find(line => line.startsWith('Mahi:'));
+            if (botResponse) {
+                res.json({ response: botResponse.replace('Mahi:', '').trim() });
+            } else {
+                res.json({ response: "I'm sorry, I didn't understand that." });
+            }
+        });
+    } catch (error) {
+        console.error('Chat error:', error);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 
