@@ -6,6 +6,13 @@ import sys
 from model import NeuralNet
 from nltk_utils import bag_of_words, tokenize
 import torch.nn as nn
+import os
+import nltk
+
+# Ensure nltk uses the correct data path
+nltk_data_dir = os.path.join(os.getcwd(), "nltk_data")
+nltk.data.path.append(nltk_data_dir)
+
 
 def get_response(sentence):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
