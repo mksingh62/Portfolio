@@ -3,16 +3,22 @@ import json
 import torch
 import numpy as np
 import sys
+import os
 import nltk
 from model import NeuralNet
 from nltk_utils import bag_of_words, tokenize
-import torch.nn as nn
 
-# Download required NLTK data
+# Setup custom nltk_data directory for Render (same as nltk_utils.py)
+nltk_data_dir = os.path.join(os.getcwd(), "nltk_data")
+os.makedirs(nltk_data_dir, exist_ok=True)
+nltk.data.path.append(nltk_data_dir)
+
+# Download 'punkt' tokenizer if missing
 try:
     nltk.data.find('tokenizers/punkt')
 except LookupError:
-    nltk.download('punkt')
+    nltk.download('punkt', download_dir=nltk_data_dir)
+
 
 def get_response(sentence):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
