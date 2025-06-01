@@ -1,0 +1,164 @@
+{
+  "intents": [
+    {
+      "category": "greeting",
+      "query": ["Hi", "Hello", "Hey", "Good morning", "Good evening", "What's up?", "How are you?", "Kaise ho?"],
+      "responses": [
+        "Hi dear! Kaise madad kar sakta hoon?",
+        "Hello ! Kya aapko kuch specific chahiye?",
+        "Hey! Portfolio ya kisi aur feature ke baare mein puchhna hai?",
+        "Hi! Kaise ho aaj?"
+      ]
+    },
+    {
+      "category": "about_mohit",
+      "query": [
+        "Who is Mohit?",
+        "Tell me about Mohit",
+        "Who is Mahi?",
+        "Tell me about Mahi",
+        "Who made you?",
+        "Who is the developer of this site?"
+      ],
+      "responses": [
+        "Mohit (nickname Mahi) ek skilled full-stack developer hain jo AI, MERN stack, ML projects, aur personal assistant development mein kaam karte hain.",
+        "Ye portfolio Mohit ne banaya hai, jo web development, AI-based assistants aur real-time coding platforms create karne mein mahir hain.",
+        "Mohit is a multi-talented developer working on projects like TripMitra (MERN), NeuroScan AI, Lyra personal assistant, and CodeArena coding platform."
+      ]
+    },
+    {
+      "category": "mohit_skills",
+      "query": [
+        "What skills does Mohit have?",
+        "Which technologies does Mohit know?",
+        "What is Mohit good at?",
+        "Tell me Mohit's skills"
+      ],
+      "responses": [
+        "Mohit is skilled in: React.js, Node.js, Express.js, MongoDB, TailwindCSS, Bootstrap, FastAPI, Flask, SQLite, Python, Machine Learning, Deep Learning, and 3D Visualization using Three.js.",
+        "He works on both frontend and backend projects, builds chatbots, and also integrates AI models in web apps.",
+        "Mohit also builds apps like voice assistants using Resemblyzer, real-time code platforms, and eCommerce solutions."
+      ]
+    },
+    {
+      "category": "projects",
+      "query": [
+        "What projects has Mohit done?",
+        "Tell me about Mohit's work",
+        "Show me Mohit's projects"
+      ],
+      "responses": [
+        "Here are some of Mohit's major projects:\n1. TripMitra – A MakeMyTrip-like travel app in MERN stack.\n2. NeuroScan AI – Brain tumor detection using VGG19 + Three.js.\n3. Lyra – A personal AI assistant with memory, voice, and command classification.\n4. CodeArena – A HackerRank-like platform with code execution and leaderboard.",
+        "Mohit works on high-level apps combining AI, full-stack web development, and real-time data handling."
+      ]
+    },
+    {
+      "category": "chatbot_help",
+      "query": [
+        "What can you do?",
+        "How can you help me?",
+        "Are you a chatbot?",
+        "Can you answer questions?"
+      ],
+      "responses": [
+        "Main Mohit ka chatbot hoon. Main aapko portfolio ke features, Mohit ke projects, aur unki skills ke baare mein batata hoon.",
+        "Main portfolio navigation, project explanation, aur Mohit ke baare mein detail dene ke liye bana hoon.",
+        "Haan, main aapke sawalon ke jawab de sakta hoon jo Mohit ke portfolio se related hain."
+      ]
+    },
+    {
+      "category": "contact_mohit",
+      "query": [
+        "How can I contact Mohit?",
+        "How to reach out to Mohit?",
+        "Can I connect with Mohit?",
+        "Mohit ka contact kaise milega?"
+      ],
+      "responses": [
+        "You can reach Mohit via the contact form on the website or through social links like LinkedIn, GitHub, or Email given in the footer.",
+        "Please scroll to the contact section of the portfolio and submit your message. Mohit will get back to you soon.",
+        "You can connect with Mohit via LinkedIn or send an email directly from the portfolio page."
+      ]
+    },
+    {
+      "category": "login_help",
+      "query": [
+        "How do I log in?",
+        "What is the login process?",
+        "Can you help me with logging in?",
+        "How can I sign in?",
+        "How do I access my account?"
+      ],
+      "responses": [
+        "To log in, please click on the login button at the top right corner and enter your credentials.",
+        "Click the login button and input your username and password.",
+        "Go to the login section, enter your details, and click submit."
+      ]
+    },
+    {
+      "category": "signup_help",
+      "query": [
+        "How do I sign up?",
+        "How to create a new account?",
+        "I want to register",
+        "Sign me up"
+      ],
+      "responses": [
+        "To create an account, click on the 'Sign Up' button and fill in your details.",
+        "Click on 'Create Account' and provide your basic information to get started.",
+        "Use the sign-up option on the homepage to register."
+      ]
+    },
+    {
+      "category": "portfolio_navigation",
+      "query": [
+        "What sections are there in the portfolio?",
+        "Where can I find projects?",
+        "Is there a resume?",
+        "Show me skills or contact"
+      ],
+      "responses": [
+        "The portfolio includes: Home, About, Projects, Skills, Resume, and Contact sections.",
+        "You can navigate to Projects to see Mohit's work, or Skills to know technologies used.",
+        "Yes, Mohit's resume is available for download in the Resume section."
+      ]
+    },
+    {
+      "category": "fun",
+      "query": [
+        "Are you intelligent?",
+        "Are you Mohit's clone?",
+        "Can you think?",
+        "Are you AI?"
+      ],
+      "responses": [
+        "I'm Mohit's smart assistant—trained on all things Mohit! 😎",
+        "You could say I'm Mohit's digital twin with a chatty personality!",
+        "I may not think like a human, but I’m powered by AI and trained to answer your queries."
+      ]
+    },
+    {
+      "category": "daily_conversation",
+      "query": [
+        "How's the weather today?",
+        "What's the plan for today?",
+        "Are you free now?",
+        "Tell me a joke",
+        "Good night",
+        "See you later",
+        "Thanks",
+        "Thank you"
+      ],
+      "responses": [
+        "Mohi aapko aaj ka weather check kar ke bata doon?",
+        "Aaj ke liye plan ready hai, batao kya karna hai?",
+        "Main free hoon, batao kaise help karoon?",
+        "Ek joke suno: Why don't scientists trust atoms? Because they make up everything!",
+        "Good night Mohit! Sweet dreams.",
+        "See you later! Kabhi bhi wapas aana.",
+        "You're welcome!",
+        "Thank you too!"
+      ]
+    }
+  ]
+}
