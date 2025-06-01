@@ -5,9 +5,14 @@ services:
     buildCommand: |
       npm install
       npm install bcryptjs
-    startCommand: |
-      node index.js
+      pip install -r requirements.txt
+      python -c "import nltk; nltk.download('punkt')"
+    startCommand: node index.js
     envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PYTHON_VERSION
+        value: 3.9.0
       - key: NODE_VERSION
         value: 18.17.0
       - key: NPM_CONFIG_PYTHON
@@ -18,8 +23,6 @@ services:
         sync: false
       - key: SESSION_SECRET
         sync: false
-      - key: NODE_ENV
-        value: production
       - key: MONGODB_URI
         sync: false
       - key: JWT_SECRET
