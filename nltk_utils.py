@@ -1,16 +1,24 @@
 import os
-import numpy as np
 import nltk
+import numpy as np
 from nltk.stem.porter import PorterStemmer
 
-# Ensure NLTK uses the same nltk_data path
+# Ensure local nltk data dir
 nltk_data_dir = os.path.join(os.getcwd(), "nltk_data")
 nltk.data.path.append(nltk_data_dir)
+
+# Fix: Download only necessary tokenizer resource
+try:
+    nltk.data.find("tokenizers/punkt")
+except LookupError:
+    nltk.download("punkt", download_dir=nltk_data_dir)
 
 stemmer = PorterStemmer()
 
 def tokenize(sentence):
-    return nltk.word_tokenize(sentence)
+    # Use standard punkt tokenizer
+    from nltk.tokenize import word_tokenize
+    return word_tokenize(sentence)
 
 def stem(word):
     return stemmer.stem(word.lower())
