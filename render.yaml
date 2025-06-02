@@ -5,6 +5,8 @@ services:
     buildCommand: |
       npm install
       npm install bcryptjs
+      # In build.sh or render.yaml
+      python -m nltk.downloader punkt -d nltk_data
       pip install torch numpy nltk && python setup.py
     startCommand: node index.js
     envVars:
