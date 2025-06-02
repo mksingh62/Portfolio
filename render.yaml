@@ -8,7 +8,7 @@ services:
       # In build.sh or render.yaml
       python -m nltk.downloader punkt -d nltk_data
       # pip install torch numpy nltk && python setup.py
-    startCommand: node index.js
+    startCommand: concurrently \"node index.js\" \"uvicorn chat_api:app --host 0.0.0.0 --port 8000\"
     envVars:
       - key: NODE_ENV
         value: production
