@@ -52,12 +52,12 @@ def get_response(sentence):
 
 
 # For CLI testing only
-# if __name__ == "__main__":
-#     import sys
-#     if len(sys.argv) > 1:
-#         message = sys.argv[1]
-#     else:
-#         message = sys.stdin.readline().strip()
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) > 1:
+        message = sys.argv[1]
+    else:
+        message = sys.stdin.readline().strip()
 
-#     response = get_response(message)
-#     print(f"Mahi: {response}")
+    response = get_response(message)
+    print(f"Mahi: {response}")
